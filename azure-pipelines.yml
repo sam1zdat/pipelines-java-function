@@ -1,0 +1,38 @@
+trigger:
+  - master
+
+pool:
+  vmImage: ubuntu-latest
+
+
+stages:
+  - stage: build
+      displayName: 'Build java project'
+      jobs:
+      - job: 
+        steps:
+        - task: Maven@3
+          inputs:
+            mavenPomFile: 'pom.xml'
+            goals: package
+            publishJUnitResults: true
+            testResultsFiles: '**/surefire-reports/TEST-*.xml'
+            mavenOptions: 'Xmx3072m'
+            javaHomeOption: 'JDKVersion'
+            jdkVersionOption: '1.11'
+            jdkArchitectureOption: 'x64'
+
+        # - task: copyFile@2
+        #   displayName: Copy jar file to artifact repository
+        #   inputs:
+        #     sourceFolder: $(System.DefaultWorkingDirectory)
+        #     contents: '**/*.jar'
+        #     targetFolder: $(build.artifactstagingdirectory)
+
+        - task: PublishPipelineArtifact@1
+          displayName: 'Publish build to artifact'
+          inputs:
+            targetPath: $(System.DefaultWorkingDirectory)/**/*.?(war|jar)
+            artifactName: drop
+            artifactType: pipeline
+
