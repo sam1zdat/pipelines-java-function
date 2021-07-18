@@ -32,7 +32,7 @@ stages:
       - task: PublishPipelineArtifact@1
         displayName: 'Publish build to artifact'
         inputs:
-          targetPath: 'target/azure-functions/**/jf-1.0.jar'
+          targetPath: 'target/azure-functions/javafunctions/jf-1.0.jar'
           #targetPath: 'target/azure-functions/javafunctions/'
           artifactName: drop
           artifactType: pipeline
