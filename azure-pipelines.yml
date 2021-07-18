@@ -37,3 +37,32 @@ stages:
           artifactName: drop
           artifactType: pipeline
 
+  - stage: deploy
+    displayName: Deployment
+    dependsOn: build
+    jobs:
+    - deployment:
+      displayName: deploy to dev
+      variables:
+        azureSubscription: 'scjavafunc'
+        appName: 'java-functions-group'
+        appType: 'linux'
+        package:
+      strategy:
+       runOnce:
+         deploy:
+           pool:
+             vmImage: ubuntu-latest
+           steps: 
+           - checkout: self
+           - task: AzureFunctionApp@1
+             displayName: 'deploy func task'
+             inputs:
+               azureSubscription: '$(azureSubscription)'
+               appType: 'functionAppLinux'
+               appName: '$(appName)'
+               package: '$(build.artifactstagingdirectory)/drop'
+               runtimeStack: 'JAVA|8'
+
+ 
+
