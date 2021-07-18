@@ -32,7 +32,7 @@ stages:
       - task: PublishPipelineArtifact@1
         displayName: 'Publish build to artifact'
         inputs:
-          targetPath: '$(System.DefaultWorkingDirectory)/target/*.?(war|jar)'
+          targetPath: '$(System.DefaultWorkingDirectory)/target/*.jar'
           artifactName: drop
           artifactType: pipeline
 
